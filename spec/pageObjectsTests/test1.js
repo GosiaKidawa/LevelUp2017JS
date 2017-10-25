@@ -1,3 +1,5 @@
+"use strict";
+
 var HomePage = require(pageObjectDir + "/homePage.js");
 var homePage = new HomePage();
 var WomenPage = require(pageObjectDir + "/womenPage.js");
@@ -8,6 +10,9 @@ var ProductPage = require(pageObjectDir + "/productPage.js");
 var productPage = new ProductPage();
 var BasketPage = require(pageObjectDir + "/basketPage.js");
 var basketPage = new BasketPage();
+var productName;
+var productPrize;
+var productSize;
 
 beforeAll(function () {
     browser.get(homePage.URL);
@@ -40,28 +45,36 @@ describe('Protractor Demo App', function () {
         })
     });
     it('check if product is new', function () {
-        
-        expect(productPage.checkIfNew()).toEqual("New");
+
+        expect(productPage.getProductCondition()).toEqual("New");
     });
     it('choose size M', function () {
-        
+
         productPage.addSizeM();
         expect(productPage.getProductSize()).toEqual("M");
     });
     it('add product to basket', function () {
-        
+
         productName = productPage.getProductName();
         productSize = productPage.getProductSize();
         productPrize = productPage.getProductPrize();
         productPage.addProduct();
-        productPage.goToBasket();
-
     });
     it('go to basket', function () {
-        
+
+        productPage.goToBasket();
         expect(basketPage.getTitleBasket()).toEqual("Order - My Store");
+    });
+    it('check product name', function () {
+
         expect(basketPage.getProductName()).toEqual(productName);
+    });
+    it('check product size', function () {
+
         expect(basketPage.getProductSize()).toContain(productSize);
+    });
+    it('check product prize', function () {
+
         expect(basketPage.getProductPrize()).toEqual(productPrize);
     });
 });

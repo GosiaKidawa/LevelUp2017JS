@@ -1,4 +1,5 @@
 "use strict";
+
 var ProductPage = function ProductPage() {
     var productCondition = element(By.css('#product_condition > span'));
     var dropdownSize = element(By.css("#uniform-group_1"));
@@ -9,6 +10,7 @@ var ProductPage = function ProductPage() {
     var addToCart = element(By.css("#add_to_cart > button"));
     var cart = element(By.css("div.shopping_cart >a > b"));
     var description = element(By.css('#short_description_content > p'));
+
 
     this.getTitleProduct = function () {
         return browser.getTitle();
@@ -24,9 +26,13 @@ var ProductPage = function ProductPage() {
         return productSize.getText();
     }
     this.getProductName = function () {
+        var EC = protractor.ExpectedConditions;
+        browser.wait(EC.visibilityOf(productName), 20000);
         return productName.getText();
     }
     this.getProductPrize = function () {
+        var EC = protractor.ExpectedConditions;
+        browser.wait(EC.visibilityOf(productPrize), 20000);
         return productPrize.getText();
     }
     this.addProduct = function () {
@@ -36,14 +42,18 @@ var ProductPage = function ProductPage() {
         return cart.click().then(function () { return cart.click() });
         // return basket.click().then(basket.click);
     }
-}
-ProductPage.prototype.isDescriptionLongerThan = function (number) {
-    return new Promise(function (resolve) {
-        description.getText().then(function (text) {
-            console.log(text);
-            resolve(text.length > number);
+    this.getTitle = function () {
+        return browser.getTitle();
+    }
+
+    ProductPage.prototype.isDescriptionLongerThan = function (number) {
+        return new Promise(function (resolve) {
+            description.getText().then(function (text) {
+                console.log(text);
+                resolve(text.length > number);
+            })
         })
-    })
+    }
 }
 
 module.exports = ProductPage;

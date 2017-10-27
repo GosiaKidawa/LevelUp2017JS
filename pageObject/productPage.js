@@ -1,59 +1,65 @@
 "use strict";
 
 var ProductPage = function ProductPage() {
-    var productCondition = element(By.css('#product_condition > span'));
-    var dropdownSize = element(By.css("#uniform-group_1"));
-    var dropdownSizeM = element(By.css("#uniform-group_1 option:nth-child(2)"));
-    var productSize = element(By.css("#uniform-group_1 > span"));
-    var productName = element(By.css("div.col-sm-4 > h1"));
-    var productPrize = element(By.css("#our_price_display"));
-    var addToCart = element(By.css("#add_to_cart > button"));
-    var cart = element(By.css("div.shopping_cart >a > b"));
-    var description = element(By.css('#short_description_content > p'));
+    this.productCondition = element(By.css('#product_condition > span'));
+    this.dropdownSize = element(By.css("#uniform-group_1"));
+    this.dropdownSizeM = element(By.css("#uniform-group_1 option:nth-child(2)"));
+    this.productSize = element(By.css("#uniform-group_1 > span"));
+    this.productName = element(By.css("div.col-sm-4 > h1"));
+    this.productPrize = element(By.css("#our_price_display"));
+    this.addToCart = element(By.css("#add_to_cart > button"));
+    this.cart = element(By.css("div.shopping_cart >a > b"));
+    this.description = element(By.css('#short_description_content > p'));
+    this.EC = protractor.ExpectedConditions;
+}
 
+ProductPage.prototype.getTitleProduct = function () {
+    return browser.getTitle();
+}
+ProductPage.prototype.getProductCondition = function () {
+    var that = this;
+    return that.productCondition.getText();
+}
+ProductPage.prototype.addSizeM = function () {
+    var that = this;
+    that.dropdownSize.click();
+    that.dropdownSizeM.click();
+}
+ProductPage.prototype.getProductSize = function () {
+    var that = this;
+    return that.productSize.getText();
+}
+ProductPage.prototype.getProductName = function () {
+    var that = this;
+    browser.wait(that.EC.visibilityOf(that.productName), 20000);
+    return that.productName.getText();
+}
+ProductPage.prototype.getProductPrize = function () {
+    var that = this;
+    browser.wait(that.EC.visibilityOf(that.productPrize), 20000);
+    return that.productPrize.getText();
+}
+ProductPage.prototype.addProduct = function () {
+    var that = this;
+    that.addToCart.click();
+}
+ProductPage.prototype.goToBasket = function () {
+    var that = this;
+    return that.cart.click().then(function () { return that.cart.click() });
+    // return basket.click().then(basket.click);
+}
+ProductPage.prototype.getTitle = function () {
+    return browser.getTitle();
+}
 
-    this.getTitleProduct = function () {
-        return browser.getTitle();
-    }
-    this.getProductCondition = function () {
-        return productCondition.getText();
-    }
-    this.addSizeM = function () {
-        dropdownSize.click();
-        dropdownSizeM.click();
-    }
-    this.getProductSize = function () {
-        return productSize.getText();
-    }
-    this.getProductName = function () {
-        var EC = protractor.ExpectedConditions;
-        browser.wait(EC.visibilityOf(productName), 20000);
-        return productName.getText();
-    }
-    this.getProductPrize = function () {
-        var EC = protractor.ExpectedConditions;
-        browser.wait(EC.visibilityOf(productPrize), 20000);
-        return productPrize.getText();
-    }
-    this.addProduct = function () {
-        addToCart.click();
-    }
-    this.goToBasket = function () {
-        return cart.click().then(function () { return cart.click() });
-        // return basket.click().then(basket.click);
-    }
-    this.getTitle = function () {
-        return browser.getTitle();
-    }
-
-    ProductPage.prototype.isDescriptionLongerThan = function (number) {
-        return new Promise(function (resolve) {
-            description.getText().then(function (text) {
-                console.log(text);
-                resolve(text.length > number);
-            })
+ProductPage.prototype.isDescriptionLongerThan = function (number) {
+    var that = this;
+    return new Promise(function (resolve) {
+        that.description.getText().then(function (text) {
+            console.log(text);
+            resolve(text.length > number);
         })
-    }
+    })
 }
 
 module.exports = ProductPage;
